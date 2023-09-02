@@ -30,7 +30,6 @@ class HistoryController  extends AbstractController {
         $history->setDateOfUpdate(new DateTime('now'));
 
         $entityManager->persist($history);
-        $entityManager->flush();
 
         $first = $data['second'];
         $second = $data['first'];
@@ -43,5 +42,13 @@ class HistoryController  extends AbstractController {
         $entityManager->flush();
 
         return $this->json(['first' => $first, 'second' => $second]);
+    }
+
+    #[Route('/history', methods: ['GET'])]
+    public function getAllHistory(EntityManagerInterface $entityManager): JsonResponse
+    {
+        $historyList = $entityManager->getRepository(History::class)->findAll();
+
+        return $this->json(['history' => $historyList]);
     }
 }
